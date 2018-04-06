@@ -1,0 +1,2 @@
+https://github.com/zooniverse/Panoptes/pull/2441, First review is a comment and not a review comment - the code in analyzer needs to change to search for comments as well as reviews
+https://github.com/zooniverse/Panoptes/pull/2452, PRs like this were just merged without a review, probably just ignore but the merge by someone else is a proxy for review
