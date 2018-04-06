@@ -67,7 +67,6 @@ module PullRequest
     def analyze_all_repo_pull_requests
       extracted_pull_requests = []
 
-      # %w( panoptes ).each do |repo_suffix|
       REPORT_REPOS.each do |repo_suffix|
         repo = "#{org_prefix}/#{repo_suffix}"
 
