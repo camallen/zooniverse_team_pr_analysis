@@ -1,5 +1,4 @@
 require 'octokit'
-# require_relative '../octokit_extension/add_retries'
 require_relative 'analyzer'
 
 module PullRequest
