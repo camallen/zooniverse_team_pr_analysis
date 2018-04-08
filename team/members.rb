@@ -29,6 +29,7 @@ module Team
       zwolf
       hughdickinson
       snblickhan
+      parrish
     ).freeze
 
     def country(team_member)
