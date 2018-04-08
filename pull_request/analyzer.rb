@@ -1,14 +1,14 @@
-require_relative '../holidays/team'
+require_relative '../team/work_days'
 
 module PullRequest
   class Analyzer
-    attr_reader :client, :repo, :pr, :team_holidays
+    attr_reader :client, :repo, :pr, :team_work_days
 
     def initialize(client:, repo:, pr:)
       @client = client
       @repo = repo
       @pr = pr
-      @team_holidays = Holidays::Team.new
+      @team_work_days = Team::WorkDays.new
     end
 
     def process
@@ -117,24 +117,24 @@ module PullRequest
 
     def working_seconds_between_times(start_time, end_time)
       seconds_between_times = seconds_between_times(end_time, start_time)
-      holiday_days = []
+      non_work_days = []
       (start_time.to_date..end_time.to_date).each do |date|
         begin
-          is_holiday = team_holidays.member_holiday?(first_reviewer_login, date)
-        rescue Holidays::Team::UnknownTeamMember => error
-          is_holiday = false
+          day_off = team_work_days.non_work_day?(first_reviewer_login, date)
+        rescue Team::Members::UnknownTeamMember => error
+          day_off = false
           puts error.message
         ensure
-          holiday_days << date if is_holiday
+          non_work_days << date if day_off
         end
       end
 
-      # remove the number of holiday days from the total diff of seconds
-      total_holidays_in_seconds = 0
-      if holiday_days.length > 0
-        total_holidays_in_seconds = max_seconds_between_dates(holiday_days)
+      total_days_off_in_seconds = 0
+      if non_work_days.length > 0
+        total_days_off_in_seconds = max_seconds_between_dates(non_work_days)
       end
-      seconds_between_times - total_holidays_in_seconds
+
+      seconds_between_times - total_days_off_in_seconds
     end
 
     def time_to_first_review
